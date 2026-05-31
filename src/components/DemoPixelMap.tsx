@@ -1,94 +1,76 @@
-const demoMarkers = [
-  { label: 'Metro', className: 'demo-marker--metro', x: '17%', y: '67%' },
-  { label: 'Plaza', className: 'demo-marker--park', x: '36%', y: '28%' },
-  { label: 'Café', className: 'demo-marker--cafe', x: '62%', y: '58%' },
-  { label: 'Torre', className: 'demo-marker--tower', x: '77%', y: '35%' },
-];
+import {
+  demoBuildings,
+  demoCrosswalks,
+  demoLamps,
+  demoMarkers,
+  demoParkings,
+  demoPlazas,
+  demoRoads,
+  demoTrees,
+  type DemoMapElement,
+} from '../data/demoMapData';
 
-const demoTrees = [
-  ['28%', '24%'],
-  ['33%', '31%'],
-  ['42%', '25%'],
-  ['84%', '73%'],
-  ['89%', '80%'],
-  ['78%', '84%'],
-  ['12%', '23%'],
-  ['58%', '82%'],
-  ['48%', '41%'],
-  ['69%', '18%'],
-  ['23%', '82%'],
-  ['37%', '76%'],
-];
-
-const demoLamps = [
-  ['22%', '50%'],
-  ['46%', '50%'],
-  ['57%', '50%'],
-  ['68%', '50%'],
-  ['22%', '70%'],
-  ['46%', '70%'],
-  ['57%', '70%'],
-  ['68%', '70%'],
-  ['14%', '38%'],
-  ['49%', '38%'],
-];
-
-const demoBuildings = Array.from({ length: 20 }, (_, index) => ({
-  className: `demo-building demo-building--${(index % 5) + 1}`,
-}));
+const getPositionStyle = (element: DemoMapElement) => ({
+  left: element.x,
+  top: element.y,
+  width: element.width,
+  height: element.height,
+});
 
 export function DemoPixelMap() {
   return (
     <div className="demo-map" aria-label="Modo demo sin tiles: vertical slice pixel art de Providencia">
       <div className="demo-map__water" aria-hidden="true" />
-      <div className="demo-map__plaza demo-map__plaza--large" aria-hidden="true">
-        <span className="demo-plaza__path demo-plaza__path--horizontal" />
-        <span className="demo-plaza__path demo-plaza__path--vertical" />
-        <span className="demo-plaza__fountain" />
-      </div>
-      <div className="demo-map__plaza demo-map__plaza--small" aria-hidden="true">
-        <span className="demo-plaza__path demo-plaza__path--horizontal" />
-        <span className="demo-plaza__kiosk" />
-      </div>
-      <div className="demo-map__parking demo-map__parking--north" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <span />
-      </div>
-      <div className="demo-map__parking demo-map__parking--south" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
+      {demoPlazas.map((plaza) => (
+        <div
+          key={plaza.id}
+          className={`demo-map__plaza demo-map__plaza--${plaza.variant}`}
+          aria-hidden="true"
+        >
+          <span className="demo-plaza__path demo-plaza__path--horizontal" />
+          {plaza.variant === 'large' && <span className="demo-plaza__path demo-plaza__path--vertical" />}
+          <span className={plaza.variant === 'large' ? 'demo-plaza__fountain' : 'demo-plaza__kiosk'} />
+        </div>
+      ))}
+      {demoParkings.map((parking) => (
+        <div
+          key={parking.id}
+          className={`demo-map__parking demo-map__parking--${parking.variant}`}
+          aria-hidden="true"
+        >
+          {Array.from({ length: parking.variant === 'north' ? 4 : 3 }, (_, index) => (
+            <span key={`${parking.id}-space-${index + 1}`} />
+          ))}
+        </div>
+      ))}
       <div className="demo-map__roads" aria-hidden="true">
-        <span className="demo-road demo-road--h demo-road--h-1" />
-        <span className="demo-road demo-road--h demo-road--h-2" />
-        <span className="demo-road demo-road--h demo-road--h-3" />
-        <span className="demo-road demo-road--v demo-road--v-1" />
-        <span className="demo-road demo-road--v demo-road--v-2" />
-        <span className="demo-road demo-road--v demo-road--v-3" />
-        <span className="demo-crosswalk demo-crosswalk--1" />
-        <span className="demo-crosswalk demo-crosswalk--2" />
-        <span className="demo-crosswalk demo-crosswalk--3" />
-        <span className="demo-crosswalk demo-crosswalk--4" />
-      </div>
-      <div className="demo-map__blocks" aria-hidden="true">
-        {demoBuildings.map((building, index) => (
-          <span key={index} className={building.className} />
+        {demoRoads.map((road) => (
+          <span
+            key={road.id}
+            className={`demo-road demo-road--${road.variant === 'horizontal' ? 'h' : 'v'}`}
+            style={getPositionStyle(road)}
+          />
+        ))}
+        {demoCrosswalks.map((crosswalk) => (
+          <span key={crosswalk.id} className="demo-crosswalk" style={getPositionStyle(crosswalk)} />
         ))}
       </div>
-      {demoTrees.map(([x, y], index) => (
-        <span key={`tree-${index}`} className="demo-tree" style={{ left: x, top: y }} aria-hidden="true" />
+      <div className="demo-map__blocks" aria-hidden="true">
+        {demoBuildings.map((building) => (
+          <span key={building.id} className={`demo-building demo-building--${building.variant}`} />
+        ))}
+      </div>
+      {demoTrees.map((tree) => (
+        <span key={tree.id} className="demo-tree" style={getPositionStyle(tree)} aria-hidden="true" />
       ))}
-      {demoLamps.map(([x, y], index) => (
-        <span key={`lamp-${index}`} className="demo-lamp" style={{ left: x, top: y }} aria-hidden="true" />
+      {demoLamps.map((lamp) => (
+        <span key={lamp.id} className="demo-lamp" style={getPositionStyle(lamp)} aria-hidden="true" />
       ))}
       {demoMarkers.map((marker) => (
         <div
-          key={marker.label}
-          className={`demo-marker ${marker.className}`}
-          style={{ left: marker.x, top: marker.y }}
+          key={marker.id}
+          className={`demo-marker demo-marker--${marker.variant}`}
+          style={getPositionStyle(marker)}
         >
           <span className="demo-marker__pin" aria-hidden="true" />
           <span className="demo-marker__label">{marker.label}</span>

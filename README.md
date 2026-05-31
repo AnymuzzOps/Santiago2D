@@ -33,3 +33,7 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## GitHub Pages
+
+El build usa `base: "/Santiago2D/"` para que los assets generados por Vite se publiquen correctamente bajo la ruta del repositorio en GitHub Pages.

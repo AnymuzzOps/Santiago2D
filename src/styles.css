@@ -39,6 +39,14 @@ a {
   padding: 1rem 0;
 }
 
+.app-shell--fallback {
+  place-items: center;
+}
+
+.emergency-fallback {
+  max-width: 760px;
+}
+
 .hero-panel {
   padding: 1rem 1.25rem;
   border: 4px solid #5a3c2e;

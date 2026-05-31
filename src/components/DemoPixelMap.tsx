@@ -8,6 +8,7 @@ const demoMarkers = [
 export function DemoPixelMap() {
   return (
     <div className="demo-map" aria-label="Modo demo sin tiles: maqueta pixel art de Providencia">
+      <strong className="demo-map__active-label">DEMO PIXEL MAP ACTIVO</strong>
       <div className="demo-map__water" aria-hidden="true" />
       <div className="demo-map__park demo-map__park--large" aria-hidden="true" />
       <div className="demo-map__park demo-map__park--small" aria-hidden="true" />

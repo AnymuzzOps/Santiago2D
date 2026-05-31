@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { mapConfig } from '../config/mapConfig';
-import { createEmptyGameStyle, createSantiagoGameStyle } from '../map/style';
+import { DemoPixelMap } from './DemoPixelMap';
+import { createSantiagoGameStyle } from '../map/style';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
 
@@ -12,13 +13,13 @@ export function GameMap() {
   const [hasTileError, setHasTileError] = useState(false);
 
   useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) {
+    if (!tileUrl || !mapContainerRef.current || mapRef.current) {
       return;
     }
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: tileUrl ? createSantiagoGameStyle(tileUrl) : createEmptyGameStyle(),
+      style: createSantiagoGameStyle(tileUrl),
       center: mapConfig.initialCenter,
       zoom: mapConfig.initialZoom,
       minZoom: mapConfig.minZoom,
@@ -66,19 +67,23 @@ export function GameMap() {
     };
   }, []);
 
-  const showMissingTilesNotice = !tileUrl;
+  const isDemoMode = !tileUrl;
   const showTileErrorNotice = tileUrl && hasTileError;
 
   return (
     <section className="map-card" aria-label="Mapa interactivo de Santiago2D">
       <div className="map-frame">
-        <div ref={mapContainerRef} className="game-map" />
-        {showMissingTilesNotice && (
-          <div className="map-notice" role="status">
-            <strong>Configura tus vector tiles</strong>
+        {isDemoMode ? (
+          <DemoPixelMap />
+        ) : (
+          <div ref={mapContainerRef} className="game-map" />
+        )}
+        {isDemoMode && (
+          <div className="demo-mode-card" role="status">
+            <strong>Modo demo sin tiles</strong>
             <span>
-              Define <code>VITE_TILE_URL</code> en un archivo <code>.env.local</code>{' '}
-              para cargar una fuente legal compatible con MapLibre.
+              Maqueta local pixel art. Define <code>VITE_TILE_URL</code> para
+              activar MapLibre con una fuente legal de vector tiles.
             </span>
           </div>
         )}

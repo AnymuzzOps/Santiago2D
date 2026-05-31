@@ -19,6 +19,8 @@ VITE_TILE_URL=https://tu-proveedor-legal.example/tiles/{z}/{x}/{y}.pbf?key=TU_KE
 
 El estilo inicial está preparado para un esquema de capas tipo OpenMapTiles (`water`, `park`, `building`, `transportation`, `place`) y muestra atribución visible a OpenStreetMap.
 
+Si `VITE_TILE_URL` no está configurado, la app muestra un modo demo local sin tiles externos: una maqueta pixel art de Providencia con calles, edificios, áreas verdes, agua decorativa y marcadores.
+
 ## Desarrollo
 
 ```bash

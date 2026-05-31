@@ -3,7 +3,8 @@ import type { StyleSpecification } from 'maplibre-gl';
 const OSM_ATTRIBUTION =
   '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors';
 
-export const PROVIDENCIA_CENTER: [number, number] = [-70.6093, -33.4263];
+// The source-layer names below assume an OpenMapTiles-like vector tile schema.
+// If a provider uses different layer names, update these source-layer values here.
 
 export function createSantiagoGameStyle(tileUrl: string): StyleSpecification {
   return {

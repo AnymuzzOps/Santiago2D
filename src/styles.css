@@ -131,6 +131,10 @@ h1 {
   line-height: 1.45;
 }
 
+.map-notice--warning {
+  background: rgba(255, 225, 191, 0.96);
+}
+
 .map-notice code {
   padding: 0.1rem 0.3rem;
   border-radius: 6px;

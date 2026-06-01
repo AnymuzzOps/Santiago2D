@@ -5,6 +5,7 @@ import { DemoPixelMap } from './DemoPixelMap';
 import { createSantiagoGameStyle } from '../map/style';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
+const tileAttribution = import.meta.env.VITE_TILE_ATTRIBUTION?.trim() || mapConfig.defaultAttribution;
 
 export function GameMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -30,7 +31,7 @@ export function GameMap() {
         const maplibregl = maplibreModule.default;
         const map = new maplibregl.Map({
           container: mapContainerRef.current,
-          style: createSantiagoGameStyle(tileUrl),
+          style: createSantiagoGameStyle(tileUrl, tileAttribution),
           center: mapConfig.initialCenter,
           zoom: mapConfig.initialZoom,
           minZoom: mapConfig.minZoom,
@@ -59,8 +60,7 @@ export function GameMap() {
 
         map.addControl(
           new maplibregl.AttributionControl({
-            customAttribution:
-              '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+            customAttribution: tileAttribution,
             compact: false,
           }),
           'bottom-right',

@@ -1,12 +1,10 @@
 import type { StyleSpecification } from 'maplibre-gl';
 
-const OSM_ATTRIBUTION =
-  '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors';
-
+// No usar tiles de Google Maps, Apple Maps ni servidores públicos de OSM en producción.
 // The source-layer names below assume an OpenMapTiles-like vector tile schema.
 // If a provider uses different layer names, update these source-layer values here.
 
-export function createSantiagoGameStyle(tileUrl: string): StyleSpecification {
+export function createSantiagoGameStyle(tileUrl: string, attribution: string): StyleSpecification {
   return {
     version: 8,
     name: 'Santiago2D Pixel Art',
@@ -17,7 +15,7 @@ export function createSantiagoGameStyle(tileUrl: string): StyleSpecification {
         tiles: [tileUrl],
         minzoom: 0,
         maxzoom: 14,
-        attribution: OSM_ATTRIBUTION,
+        attribution,
       },
     },
     layers: [

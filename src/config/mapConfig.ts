@@ -11,4 +11,5 @@ export const mapConfig = {
     [-70.6705, -33.475],
     [-70.535, -33.374],
   ] as BoundsTuple,
+  defaultAttribution: '© OpenStreetMap contributors',
 };

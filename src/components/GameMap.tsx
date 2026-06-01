@@ -6,14 +6,20 @@ import { createSantiagoGameStyle } from '../map/style';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
 const tileAttribution = import.meta.env.VITE_TILE_ATTRIBUTION?.trim() || mapConfig.defaultAttribution;
+const requiredTilePlaceholders = ['{z}', '{x}', '{y}'];
+
+const hasXyzTilePlaceholders = (url: string) =>
+  requiredTilePlaceholders.every((placeholder) => url.includes(placeholder));
 
 export function GameMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [hasTileError, setHasTileError] = useState(false);
 
-  const shouldRenderMapLibre = Boolean(tileUrl);
-  const shouldRenderDemoPixelMap = !shouldRenderMapLibre;
+  const hasTileUrl = Boolean(tileUrl);
+  const hasTileUrlFormatWarning = Boolean(tileUrl && !hasXyzTilePlaceholders(tileUrl));
+  const shouldRenderMapLibre = hasTileUrl && !hasTileUrlFormatWarning;
+  const shouldRenderDemoPixelMap = !hasTileUrl;
 
   useEffect(() => {
     if (!shouldRenderMapLibre || !tileUrl || !mapContainerRef.current || mapRef.current) {
@@ -95,6 +101,16 @@ export function GameMap() {
             <span>
               Maqueta local pixel art. Define <code>VITE_TILE_URL</code> para
               activar MapLibre con una fuente legal de vector tiles.
+            </span>
+          </div>
+        )}
+        {hasTileUrlFormatWarning && (
+          <div className="map-notice map-notice--warning" role="status">
+            <strong>Formato de tiles no compatible todavía</strong>
+            <span>
+              Por ahora <code>VITE_TILE_URL</code> debe ser una URL XYZ de vector tiles
+              con <code>{'{z}'}</code>, <code>{'{x}'}</code> y <code>{'{y}'}</code>, por ejemplo
+              <code>https://example.com/tiles/{'{z}'}/{'{x}'}/{'{y}'}.pbf</code>.
             </span>
           </div>
         )}

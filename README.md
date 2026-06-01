@@ -47,12 +47,18 @@ VITE_TILE_ATTRIBUTION=© OpenStreetMap contributors
 
 `VITE_TILE_ATTRIBUTION` se muestra en el control de atribución de MapLibre cuando el mapa real está activo. Ajusta ese texto según los requisitos del proveedor elegido.
 
+### Formatos aceptados por ahora
+
+- **URL XYZ de vector tiles**: soportada actualmente. Debe incluir los placeholders `{z}`, `{x}` y `{y}`, por ejemplo `https://example.com/tiles/{z}/{x}/{y}.pbf`.
+- **TileJSON**: todavía no está soportado por la configuración actual. Si pegas una URL TileJSON sin `{z}`, `{x}` y `{y}`, la app mostrará una advertencia en vez de intentar cargarla como XYZ.
+- **PMTiles**: previsto como soporte futuro. Para usar `pmtiles://` o archivos `.pmtiles` habrá que añadir el protocolo/cliente PMTiles en una iteración posterior.
+
 El estilo inicial está preparado para un esquema de capas tipo OpenMapTiles (`water`, `park`, `building`, `transportation`, `place`) y muestra atribución visible a OpenStreetMap. Si el proveedor usa nombres de capas distintos, actualiza los `source-layer` en `src/map/style.ts`.
 
 ### Opciones legales recomendadas
 
-1. **Proveedor compatible con OpenMapTiles**: usar un proveedor comercial o comunitario que entregue vector tiles con licencia clara, URL template compatible con MapLibre y atribución requerida. Es la opción más rápida para producción.
-2. **PMTiles propio**: generar o adquirir un archivo `.pmtiles` propio y servirlo desde hosting estático/CDN bajo tus términos. Para usar el protocolo `pmtiles://` habría que añadir el cliente/protocolo PMTiles en una siguiente iteración; por ahora la configuración espera una URL de tiles vectoriales compatible con MapLibre.
+1. **Proveedor compatible con OpenMapTiles**: usar un proveedor comercial o comunitario que entregue vector tiles con licencia clara, URL template XYZ compatible con MapLibre y atribución requerida. Es la opción más rápida para producción.
+2. **PMTiles propio**: generar o adquirir un archivo `.pmtiles` propio y servirlo desde hosting estático/CDN bajo tus términos. Para usar el protocolo `pmtiles://` habría que añadir el cliente/protocolo PMTiles en una siguiente iteración; por ahora la configuración espera una URL XYZ de tiles vectoriales compatible con MapLibre.
 3. **Tiles generados desde OpenStreetMap con OpenMapTiles**: construir tu propia fuente desde datos OSM usando herramientas tipo OpenMapTiles, alojarla en infraestructura propia y mantener la atribución/licencias correspondientes. Es la opción con más control, pero también con más costo operativo.
 
 Si `VITE_TILE_URL` no está configurado, la app muestra un modo demo local sin tiles externos: una maqueta pixel art de Providencia con calles, edificios, áreas verdes, agua decorativa y marcadores.

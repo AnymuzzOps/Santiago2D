@@ -41,8 +41,13 @@ Conectar tiles legales compatibles con MapLibre. La ruta recomendada es usar un 
 El proyecto no incluye tiles de Google Maps, Apple Maps ni fuentes sin permiso. **No usar tiles de Google Maps, Apple Maps ni servidores públicos de OSM en producción**: además de no ser compatibles con este estilo vectorial, sus términos/infraestructura no están pensados para este uso. Para ver datos reales del mapa, crea un archivo `.env.local` con una fuente legal de vector tiles compatible con MapLibre:
 
 ```bash
-VITE_TILE_URL=https://tu-proveedor-legal.example/tiles/{z}/{x}/{y}.pbf?key=TU_KEY
+# XYZ vector tiles
+VITE_TILE_URL=https://example.com/tiles/{z}/{x}/{y}.pbf
 VITE_TILE_ATTRIBUTION=© OpenStreetMap contributors
+
+# TileJSON compatible con MapLibre
+# VITE_TILE_URL=https://tiles.stadiamaps.com/data/openmaptiles.json
+# VITE_TILE_ATTRIBUTION=© OpenStreetMap contributors
 ```
 
 `VITE_TILE_ATTRIBUTION` se muestra en el control de atribución de MapLibre cuando el mapa real está activo. Ajusta ese texto según los requisitos del proveedor elegido.
@@ -50,10 +55,14 @@ VITE_TILE_ATTRIBUTION=© OpenStreetMap contributors
 ### Formatos aceptados por ahora
 
 - **URL XYZ de vector tiles**: soportada actualmente. Debe incluir los placeholders `{z}`, `{x}` y `{y}`, por ejemplo `https://example.com/tiles/{z}/{x}/{y}.pbf`.
-- **TileJSON**: todavía no está soportado por la configuración actual. Si pegas una URL TileJSON sin `{z}`, `{x}` y `{y}`, la app mostrará una advertencia en vez de intentar cargarla como XYZ.
+- **URL TileJSON**: soportada actualmente si la URL contiene `.json`, por ejemplo `https://tiles.stadiamaps.com/data/openmaptiles.json`. MapLibre carga esta fuente con `url: VITE_TILE_URL`.
 - **PMTiles**: previsto como soporte futuro. Para usar `pmtiles://` o archivos `.pmtiles` habrá que añadir el protocolo/cliente PMTiles en una iteración posterior.
 
+MapLibre soporta fuentes vectoriales tanto con `tiles: [...]` como con `url` TileJSON; Santiago2D detecta automáticamente ambos formatos desde `VITE_TILE_URL`.
+
 El estilo inicial está preparado para un esquema de capas tipo OpenMapTiles (`water`, `park`, `building`, `transportation`, `place`) y muestra atribución visible a OpenStreetMap. Si el proveedor usa nombres de capas distintos, actualiza los `source-layer` en `src/map/style.ts`.
+
+No subas tokens, claves privadas ni URLs con secretos al repositorio. Proveedores como Stadia Maps o MapTiler pueden requerir cuenta, token, plan o configuración de dominio según su oferta vigente.
 
 ### Opciones legales recomendadas
 

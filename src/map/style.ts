@@ -1,22 +1,40 @@
-import type { StyleSpecification } from 'maplibre-gl';
+import type { SourceSpecification, StyleSpecification } from 'maplibre-gl';
 
 // No usar tiles de Google Maps, Apple Maps ni servidores públicos de OSM en producción.
 // The source-layer names below assume an OpenMapTiles-like vector tile schema.
 // If a provider uses different layer names, update these source-layer values here.
 
-export function createSantiagoGameStyle(tileUrl: string, attribution: string): StyleSpecification {
+export type TileSourceKind = 'xyz' | 'tilejson';
+
+const createVectorSource = (tileUrl: string, attribution: string, sourceKind: TileSourceKind): SourceSpecification => {
+  if (sourceKind === 'tilejson') {
+    return {
+      type: 'vector',
+      url: tileUrl,
+      attribution,
+    };
+  }
+
+  return {
+    type: 'vector',
+    tiles: [tileUrl],
+    minzoom: 0,
+    maxzoom: 14,
+    attribution,
+  };
+};
+
+export function createSantiagoGameStyle(
+  tileUrl: string,
+  attribution: string,
+  sourceKind: TileSourceKind,
+): StyleSpecification {
   return {
     version: 8,
     name: 'Santiago2D Pixel Art',
     glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources: {
-      santiago: {
-        type: 'vector',
-        tiles: [tileUrl],
-        minzoom: 0,
-        maxzoom: 14,
-        attribution,
-      },
+      santiago: createVectorSource(tileUrl, attribution, sourceKind),
     },
     layers: [
       {

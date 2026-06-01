@@ -2,24 +2,42 @@ import { useEffect, useRef, useState } from 'react';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import { mapConfig } from '../config/mapConfig';
 import { DemoPixelMap } from './DemoPixelMap';
-import { createSantiagoGameStyle } from '../map/style';
+import { createSantiagoGameStyle, type TileSourceKind } from '../map/style';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
 const tileAttribution = import.meta.env.VITE_TILE_ATTRIBUTION?.trim() || mapConfig.defaultAttribution;
 const requiredTilePlaceholders = ['{z}', '{x}', '{y}'];
 
+type TileSourceMode = TileSourceKind | 'empty' | 'invalid';
+
 const hasXyzTilePlaceholders = (url: string) =>
   requiredTilePlaceholders.every((placeholder) => url.includes(placeholder));
+
+const detectTileSourceMode = (url?: string): TileSourceMode => {
+  if (!url) {
+    return 'empty';
+  }
+
+  if (hasXyzTilePlaceholders(url)) {
+    return 'xyz';
+  }
+
+  if (url.toLowerCase().includes('.json')) {
+    return 'tilejson';
+  }
+
+  return 'invalid';
+};
 
 export function GameMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [hasTileError, setHasTileError] = useState(false);
 
-  const hasTileUrl = Boolean(tileUrl);
-  const hasTileUrlFormatWarning = Boolean(tileUrl && !hasXyzTilePlaceholders(tileUrl));
-  const shouldRenderMapLibre = hasTileUrl && !hasTileUrlFormatWarning;
-  const shouldRenderDemoPixelMap = !hasTileUrl;
+  const tileSourceMode = detectTileSourceMode(tileUrl);
+  const shouldRenderDemoPixelMap = tileSourceMode === 'empty';
+  const shouldRenderMapLibre = tileSourceMode === 'xyz' || tileSourceMode === 'tilejson';
+  const hasTileUrlFormatWarning = tileSourceMode === 'invalid';
 
   useEffect(() => {
     if (!shouldRenderMapLibre || !tileUrl || !mapContainerRef.current || mapRef.current) {
@@ -37,7 +55,7 @@ export function GameMap() {
         const maplibregl = maplibreModule.default;
         const map = new maplibregl.Map({
           container: mapContainerRef.current,
-          style: createSantiagoGameStyle(tileUrl, tileAttribution),
+          style: createSantiagoGameStyle(tileUrl, tileAttribution, tileSourceMode),
           center: mapConfig.initialCenter,
           zoom: mapConfig.initialZoom,
           minZoom: mapConfig.minZoom,
@@ -83,7 +101,7 @@ export function GameMap() {
       mapRef.current?.remove();
       mapRef.current = null;
     };
-  }, [shouldRenderMapLibre]);
+  }, [shouldRenderMapLibre, tileSourceMode]);
 
   const showTileErrorNotice = shouldRenderMapLibre && hasTileError;
 
@@ -106,11 +124,10 @@ export function GameMap() {
         )}
         {hasTileUrlFormatWarning && (
           <div className="map-notice map-notice--warning" role="status">
-            <strong>Formato de tiles no compatible todavía</strong>
+            <strong>Formato de tiles no compatible</strong>
             <span>
-              Por ahora <code>VITE_TILE_URL</code> debe ser una URL XYZ de vector tiles
-              con <code>{'{z}'}</code>, <code>{'{x}'}</code> y <code>{'{y}'}</code>, por ejemplo
-              <code>https://example.com/tiles/{'{z}'}/{'{x}'}/{'{y}'}.pbf</code>.
+              Usa una URL XYZ con <code>{'{z}'}</code>, <code>{'{x}'}</code> y <code>{'{y}'}</code>,
+              o una URL TileJSON que contenga <code>.json</code>.
             </span>
           </div>
         )}

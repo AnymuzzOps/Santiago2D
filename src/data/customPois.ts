@@ -1,4 +1,4 @@
-export type CustomPoiType = 'metro' | 'plaza' | 'cafe' | 'hospital' | 'university' | 'landmark';
+export type CustomPoiType = 'custom' | 'metro' | 'plaza' | 'cafe' | 'hospital' | 'university' | 'landmark';
 
 export type CustomPoi = {
   id: string;
@@ -11,6 +11,7 @@ export type CustomPoi = {
 };
 
 export const customPoiTypeLabels: Record<CustomPoiType, string> = {
+  custom: 'Custom',
   metro: 'Metro',
   plaza: 'Plaza',
   cafe: 'Café',
@@ -21,6 +22,15 @@ export const customPoiTypeLabels: Record<CustomPoiType, string> = {
 
 export const customPois: CustomPoi[] = [
   // Ejemplos desactivados: cambia `visible` a true cuando quieras mostrar POIs manuales.
+  // {
+  //   id: 'poi-nuevo',
+  //   type: 'custom',
+  //   name: 'Nuevo lugar',
+  //   description: 'Descripción pendiente.',
+  //   coordinates: [-70.6093, -33.4263],
+  //   icon: 'star',
+  //   visible: true,
+  // },
   // {
   //   id: 'metro-los-leones',
   //   type: 'metro',

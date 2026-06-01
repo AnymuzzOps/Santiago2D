@@ -52,6 +52,16 @@ VITE_TILE_ATTRIBUTION=© OpenStreetMap contributors
 
 `VITE_TILE_ATTRIBUTION` se muestra en el control de atribución de MapLibre cuando el mapa real está activo. Ajusta ese texto según los requisitos del proveedor elegido.
 
+### Editor local de POIs manuales
+
+Para crear POIs manuales sin adivinar coordenadas, puedes activar un helper local/debug con:
+
+```bash
+VITE_ENABLE_POI_EDITOR=true
+```
+
+Cuando el mapa real de MapLibre esté activo, usa click derecho o `Alt` + click sobre el mapa para abrir un panel con `lng/lat` y un snippet listo para copiar en `src/data/customPois.ts`. El editor no guarda archivos automáticamente, no agrega backend y no aparece si `VITE_ENABLE_POI_EDITOR` no está activo.
+
 ### GitHub Pages con Stadia Maps
 
 El workflow de GitHub Pages está preparado para inyectar una clave de Stadia Maps durante `npm run build` sin escribirla en el repositorio. Antes de desplegar, crea un secret de Actions llamado `STADIA_API_KEY` en GitHub:

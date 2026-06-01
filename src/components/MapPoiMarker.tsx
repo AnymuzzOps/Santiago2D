@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import type { LngLatLike, Map as MapLibreMap, Marker as MapLibreMarker, MarkerOptions } from 'maplibre-gl';
 import type { CustomPoi } from '../data/customPois';
 
+const getPoiIconLabel = (icon: string) => (icon === 'star' ? '✦' : icon);
+
 export type MapPoiMarkerConstructor = new (options?: MarkerOptions) => MapLibreMarker;
 
 type MapPoiMarkerProps = {
@@ -35,7 +37,7 @@ export function MapPoiMarker({
       const icon = document.createElement('span');
       icon.className = 'real-poi-marker__icon';
       icon.setAttribute('aria-hidden', 'true');
-      icon.textContent = poi.icon;
+      icon.textContent = getPoiIconLabel(poi.icon);
 
       const label = document.createElement('span');
       label.className = 'real-poi-marker__label';

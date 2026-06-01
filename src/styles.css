@@ -442,14 +442,20 @@ h1 {
   box-shadow: 0 5px 0 #9b6a42;
 }
 
-.diorama-toggle {
+.map-view-controls {
   position: absolute;
   right: 1rem;
   top: 5.25rem;
   z-index: 4;
   display: grid;
+  gap: 0.55rem;
+  width: min(260px, calc(100% - 2rem));
+}
+
+.diorama-toggle {
+  display: grid;
   gap: 0.1rem;
-  min-width: 150px;
+  width: 100%;
   padding: 0.55rem 0.75rem;
   border: 3px solid #3d2b24;
   border-radius: 14px;
@@ -484,6 +490,39 @@ h1 {
 
 .diorama-toggle:focus-visible {
   outline: 4px solid #7ed7ee;
+  outline-offset: 3px;
+}
+
+.camera-presets {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.camera-presets__button {
+  padding: 0.45rem 0.65rem;
+  border: 3px solid #3d2b24;
+  border-radius: 12px;
+  background: rgba(255, 242, 200, 0.92);
+  color: #3d2b24;
+  box-shadow: 0 4px 0 #7d5d43;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-align: left;
+}
+
+.camera-presets__button--active {
+  background: rgba(126, 215, 238, 0.95);
+  box-shadow: 0 4px 0 #2a8ba3;
+}
+
+.camera-presets__button:hover,
+.camera-presets__button:focus-visible {
+  transform: translateY(-2px);
+}
+
+.camera-presets__button:focus-visible {
+  outline: 4px solid #ffd36b;
   outline-offset: 3px;
 }
 
@@ -1169,11 +1208,19 @@ h1 {
     font-size: 0.64rem;
   }
 
-  .diorama-toggle {
+  .map-view-controls {
     right: 0.75rem;
     top: 4.85rem;
-    min-width: 128px;
+    width: min(190px, calc(100% - 1.5rem));
+  }
+
+  .diorama-toggle {
     padding: 0.45rem 0.6rem;
+  }
+
+  .camera-presets__button {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.64rem;
   }
 
   .demo-map-controls button {

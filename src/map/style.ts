@@ -138,6 +138,7 @@ export function createSantiagoGameStyle(
         },
         paint: {
           'line-color': '#7d5d43',
+          'line-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.42, 15, 0.72],
           'line-width': [
             'interpolate',
             ['linear'],
@@ -163,6 +164,7 @@ export function createSantiagoGameStyle(
         },
         paint: {
           'line-color': '#f8e9bd',
+          'line-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.55, 15, 0.82],
           'line-width': [
             'interpolate',
             ['linear'],
@@ -239,6 +241,7 @@ export function createSantiagoGameStyle(
         },
         paint: {
           'line-color': '#fff2c8',
+          'line-opacity': ['interpolate', ['linear'], ['zoom'], 14, 0.68, 17, 0.92],
           'line-dasharray': [1.4, 1.4],
           'line-width': ['interpolate', ['linear'], ['zoom'], 14, 1, 17, 2.4],
         },

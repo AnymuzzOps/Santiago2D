@@ -5,12 +5,14 @@ import { customPois, customPoiTypeLabels, type CustomPoi } from '../data/customP
 import { createSantiagoGameStyle, type TileSourceKind } from '../map/style';
 import { DemoPixelMap } from './DemoPixelMap';
 import { DioramaLayer } from './DioramaLayer';
+import { TerrainAtmosphereLayer } from './TerrainAtmosphereLayer';
 import { MapPoiMarker, type MapPoiMarkerConstructor } from './MapPoiMarker';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
 const tileAttribution = import.meta.env.VITE_TILE_ATTRIBUTION?.trim() || mapConfig.defaultAttribution;
 const isPoiEditorEnabled = import.meta.env.VITE_ENABLE_POI_EDITOR === 'true';
 const requiredTilePlaceholders = ['{z}', '{x}', '{y}'];
+type CameraPresetKey = keyof typeof mapConfig.cameraPresets;
 
 type TileSourceMode = TileSourceKind | 'empty' | 'invalid';
 
@@ -61,6 +63,7 @@ export function GameMap() {
   const [selectedCustomPoi, setSelectedCustomPoi] = useState<CustomPoi | null>(null);
   const [poiEditorDraft, setPoiEditorDraft] = useState<PoiEditorDraft | null>(null);
   const [isDioramaEnabled, setIsDioramaEnabled] = useState(true);
+  const [activeCameraPreset, setActiveCameraPreset] = useState<CameraPresetKey>('costaneraHigh');
 
   const tileSourceMode = detectTileSourceMode(tileUrl);
   const shouldRenderDemoPixelMap = tileSourceMode === 'empty';
@@ -183,6 +186,18 @@ export function GameMap() {
 
     void navigator.clipboard?.writeText(poiEditorDraft.snippet);
   }, [poiEditorDraft]);
+  const handleCameraPreset = useCallback((presetKey: CameraPresetKey) => {
+    const preset = mapConfig.cameraPresets[presetKey];
+    setActiveCameraPreset(presetKey);
+    setIsDioramaEnabled(true);
+    mapInstance?.easeTo({
+      bearing: preset.bearing,
+      center: preset.center,
+      duration: 900,
+      pitch: preset.pitch,
+      zoom: preset.zoom,
+    });
+  }, [mapInstance]);
 
   const showTileErrorNotice = shouldRenderMapLibre && hasTileError;
 
@@ -223,6 +238,7 @@ export function GameMap() {
         )}
         {shouldRenderMapLibre && (
           <>
+            <TerrainAtmosphereLayer enabled={isDioramaEnabled} map={mapInstance} />
             <DioramaLayer enabled={isDioramaEnabled} map={mapInstance} />
             <MapPoiMarker
               map={mapInstance}
@@ -239,16 +255,31 @@ export function GameMap() {
           </div>
         )}
         {shouldRenderMapLibre && (
-          <button
-            type="button"
-            className={`diorama-toggle ${isDioramaEnabled ? 'diorama-toggle--active' : ''}`}
-            onClick={() => setIsDioramaEnabled((enabled) => !enabled)}
-            aria-pressed={isDioramaEnabled}
-            aria-label="Activar o desactivar capa diorama experimental"
-          >
-            <span>Diorama 2.5D</span>
-            <strong>{isDioramaEnabled ? 'Activo' : 'Plano'}</strong>
-          </button>
+          <div className="map-view-controls" aria-label="Controles de vista del mapa">
+            <button
+              type="button"
+              className={`diorama-toggle ${isDioramaEnabled ? 'diorama-toggle--active' : ''}`}
+              onClick={() => setIsDioramaEnabled((enabled) => !enabled)}
+              aria-pressed={isDioramaEnabled}
+              aria-label="Activar o desactivar capa diorama experimental"
+            >
+              <span>Diorama 2.5D</span>
+              <strong>{isDioramaEnabled ? 'Activo' : 'Plano'}</strong>
+            </button>
+            <div className="camera-presets" role="group" aria-label="Presets de cámara">
+              {Object.entries(mapConfig.cameraPresets).map(([presetKey, preset]) => (
+                <button
+                  key={presetKey}
+                  type="button"
+                  className={activeCameraPreset === presetKey ? 'camera-presets__button camera-presets__button--active' : 'camera-presets__button'}
+                  onClick={() => handleCameraPreset(presetKey as CameraPresetKey)}
+                  aria-pressed={activeCameraPreset === presetKey}
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
         {shouldRenderMapLibre && selectedCustomPoi && (
           <aside className="real-map-info-panel" aria-live="polite" aria-label="Información del punto seleccionado">

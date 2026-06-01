@@ -38,7 +38,7 @@ Conectar tiles legales compatibles con MapLibre. La ruta recomendada es usar un 
 
 ## Capa experimental DioramaLayer
 
-Cuando el mapa real de MapLibre está activo, Santiago2D monta una capa visual experimental `DioramaLayer` sobre el estilo base. Esta capa se puede activar/desactivar desde el control **Diorama 2.5D** y agrega volumen con `fill-extrusion`, sombras, highlights de techos y detalles urbanos livianos desde zoom 15+ en la zona Providencia / Los Leones / Costanera Center.
+Cuando el mapa real de MapLibre está activo, Santiago2D monta capas visuales experimentales sobre el estilo base: `TerrainAtmosphereLayer` simula terreno, cerros, masa verde y textura urbana sin imágenes externas, mientras `DioramaLayer` agrega volumen con `fill-extrusion`, sombras, highlights de techos y detalles urbanos livianos desde zoom 15+ en la zona Providencia / Los Leones / Costanera Center. El control **Diorama 2.5D** permite volver a modo plano, y los presets de cámara enfocan Costanera desde altura o Cerro San Cristóbal / Providencia.
 
 ## Configuración de tiles legales
 

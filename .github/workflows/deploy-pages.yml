@@ -35,6 +35,9 @@ jobs:
 
       - name: Build Vite app
         run: npm run build
+        env:
+          VITE_TILE_URL: https://tiles.stadiamaps.com/data/openmaptiles.json
+          VITE_TILE_ATTRIBUTION: © OpenStreetMap contributors
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3

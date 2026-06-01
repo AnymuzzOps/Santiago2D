@@ -52,6 +52,23 @@ VITE_TILE_ATTRIBUTION=© OpenStreetMap contributors
 
 `VITE_TILE_ATTRIBUTION` se muestra en el control de atribución de MapLibre cuando el mapa real está activo. Ajusta ese texto según los requisitos del proveedor elegido.
 
+### GitHub Pages con Stadia Maps
+
+El workflow de GitHub Pages está preparado para inyectar una clave de Stadia Maps durante `npm run build` sin escribirla en el repositorio. Antes de desplegar, crea un secret de Actions llamado `STADIA_API_KEY` en GitHub:
+
+1. Abre **Settings → Secrets and variables → Actions** en el repositorio.
+2. Crea un **Repository secret** llamado `STADIA_API_KEY`.
+3. Pega la API key entregada por Stadia Maps y guarda el secret.
+
+Durante el build de GitHub Actions, Vite recibe:
+
+```bash
+VITE_TILE_URL=https://tiles.stadiamaps.com/data/openmaptiles.json?api_key=${{ secrets.STADIA_API_KEY }}
+VITE_TILE_ATTRIBUTION=© Stadia Maps © OpenMapTiles © OpenStreetMap contributors
+```
+
+No uses `.env.local` para producción: ese archivo es solo para desarrollo local y sigue ignorado por Git. Tampoco subas tokens, claves privadas ni URLs con secretos al repositorio.
+
 ### Formatos aceptados por ahora
 
 - **URL XYZ de vector tiles**: soportada actualmente. Debe incluir los placeholders `{z}`, `{x}` y `{y}`, por ejemplo `https://example.com/tiles/{z}/{x}/{y}.pbf`.

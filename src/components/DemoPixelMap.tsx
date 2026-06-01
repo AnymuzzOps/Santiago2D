@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   demoBuildings,
   demoCrosswalks,
@@ -17,31 +18,53 @@ const getPositionStyle = (element: DemoMapElement) => ({
   height: element.height,
 });
 
+const featureTypeLabels: Record<DemoMapElement['type'], string> = {
+  building: 'Edificio',
+  tree: 'Árbol',
+  lamp: 'Luminaria',
+  marker: 'Marcador',
+  plaza: 'Plaza / parque',
+  parking: 'Estacionamiento',
+  road: 'Calle',
+  crosswalk: 'Paso peatonal',
+};
+
 export function DemoPixelMap() {
+  const [selectedFeature, setSelectedFeature] = useState<DemoMapElement | null>(null);
+
   return (
     <div className="demo-map" aria-label="Modo demo sin tiles: vertical slice pixel art de Providencia">
       <div className="demo-map__water" aria-hidden="true" />
       {demoPlazas.map((plaza) => (
-        <div
+        <button
           key={plaza.id}
-          className={`demo-map__plaza demo-map__plaza--${plaza.variant}`}
-          aria-hidden="true"
+          className={`demo-map__plaza demo-map__plaza--${plaza.variant} demo-feature-button`}
+          type="button"
+          onClick={() => setSelectedFeature(plaza)}
+          aria-label={`Ver información de ${plaza.label}`}
         >
-          <span className="demo-plaza__path demo-plaza__path--horizontal" />
-          {plaza.variant === 'large' && <span className="demo-plaza__path demo-plaza__path--vertical" />}
-          <span className={plaza.variant === 'large' ? 'demo-plaza__fountain' : 'demo-plaza__kiosk'} />
-        </div>
+          <span className="demo-plaza__path demo-plaza__path--horizontal" aria-hidden="true" />
+          {plaza.variant === 'large' && (
+            <span className="demo-plaza__path demo-plaza__path--vertical" aria-hidden="true" />
+          )}
+          <span
+            className={plaza.variant === 'large' ? 'demo-plaza__fountain' : 'demo-plaza__kiosk'}
+            aria-hidden="true"
+          />
+        </button>
       ))}
       {demoParkings.map((parking) => (
-        <div
+        <button
           key={parking.id}
-          className={`demo-map__parking demo-map__parking--${parking.variant}`}
-          aria-hidden="true"
+          className={`demo-map__parking demo-map__parking--${parking.variant} demo-feature-button`}
+          type="button"
+          onClick={() => setSelectedFeature(parking)}
+          aria-label={`Ver información de ${parking.label}`}
         >
           {Array.from({ length: parking.variant === 'north' ? 4 : 3 }, (_, index) => (
-            <span key={`${parking.id}-space-${index + 1}`} />
+            <span key={`${parking.id}-space-${index + 1}`} aria-hidden="true" />
           ))}
-        </div>
+        </button>
       ))}
       <div className="demo-map__roads" aria-hidden="true">
         {demoRoads.map((road) => (
@@ -55,9 +78,15 @@ export function DemoPixelMap() {
           <span key={crosswalk.id} className="demo-crosswalk" style={getPositionStyle(crosswalk)} />
         ))}
       </div>
-      <div className="demo-map__blocks" aria-hidden="true">
+      <div className="demo-map__blocks">
         {demoBuildings.map((building) => (
-          <span key={building.id} className={`demo-building demo-building--${building.variant}`} />
+          <button
+            key={building.id}
+            className={`demo-building demo-building--${building.variant} demo-feature-button`}
+            type="button"
+            onClick={() => setSelectedFeature(building)}
+            aria-label={`Ver información de ${building.label}`}
+          />
         ))}
       </div>
       {demoTrees.map((tree) => (
@@ -67,15 +96,33 @@ export function DemoPixelMap() {
         <span key={lamp.id} className="demo-lamp" style={getPositionStyle(lamp)} aria-hidden="true" />
       ))}
       {demoMarkers.map((marker) => (
-        <div
+        <button
           key={marker.id}
-          className={`demo-marker demo-marker--${marker.variant}`}
+          className={`demo-marker demo-marker--${marker.variant} demo-feature-button`}
           style={getPositionStyle(marker)}
+          type="button"
+          onClick={() => setSelectedFeature(marker)}
+          aria-label={`Ver información de ${marker.label}`}
         >
           <span className="demo-marker__pin" aria-hidden="true" />
           <span className="demo-marker__label">{marker.label}</span>
-        </div>
+        </button>
       ))}
+      {selectedFeature && (
+        <aside className="demo-info-panel" aria-live="polite" aria-label="Información del elemento seleccionado">
+          <button
+            className="demo-info-panel__close"
+            type="button"
+            onClick={() => setSelectedFeature(null)}
+            aria-label="Cerrar información"
+          >
+            ×
+          </button>
+          <span className="demo-info-panel__eyebrow">{featureTypeLabels[selectedFeature.type]}</span>
+          <strong>{selectedFeature.label}</strong>
+          <p>{selectedFeature.description}</p>
+        </aside>
+      )}
       <aside className="demo-legend" aria-label="Leyenda del mapa demo">
         <strong>Providencia pixel slice</strong>
         <span><i className="demo-legend__swatch demo-legend__swatch--road" />Calles</span>

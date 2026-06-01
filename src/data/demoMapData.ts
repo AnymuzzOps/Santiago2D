@@ -33,14 +33,15 @@ export type DemoMapElement = {
   width?: string;
   height?: string;
   label?: string;
+  description?: string;
   variant?: DemoMapVariant;
 };
 
 export const demoMarkers: DemoMapElement[] = [
-  { id: 'marker-metro-los-leones', type: 'marker', x: '17%', y: '67%', label: 'Metro', variant: 'metro' },
-  { id: 'marker-plaza-barrio', type: 'marker', x: '36%', y: '28%', label: 'Plaza', variant: 'park' },
-  { id: 'marker-cafe-pocuro', type: 'marker', x: '62%', y: '58%', label: 'Café', variant: 'cafe' },
-  { id: 'marker-torre-providencia', type: 'marker', x: '77%', y: '35%', label: 'Torre', variant: 'tower' },
+  { id: 'marker-metro-los-leones', type: 'marker', x: '17%', y: '67%', label: 'Metro Los Leones', description: 'Acceso rápido al eje de transporte del barrio, destacado como punto de orientación del prototipo.', variant: 'metro' },
+  { id: 'marker-plaza-barrio', type: 'marker', x: '36%', y: '28%', label: 'Plaza de barrio', description: 'Área verde vecinal pensada como hito de descanso y encuentro dentro del mapa demo.', variant: 'park' },
+  { id: 'marker-cafe-pocuro', type: 'marker', x: '62%', y: '58%', label: 'Café Pocuro', description: 'Pequeño comercio de esquina para probar puntos de interés con estética cartoon.', variant: 'cafe' },
+  { id: 'marker-torre-providencia', type: 'marker', x: '77%', y: '35%', label: 'Torre Providencia', description: 'Referencia vertical simplificada para representar edificios reconocibles del sector.', variant: 'tower' },
 ];
 
 export const demoTrees: DemoMapElement[] = [
@@ -76,17 +77,19 @@ export const demoBuildings: DemoMapElement[] = Array.from({ length: 20 }, (_, in
   type: 'building',
   x: `${(index % 5) + 1}`,
   y: `${Math.floor(index / 5) + 1}`,
+  label: `Edificio ${index + 1}`,
+  description: 'Bloque urbano simplificado con altura visual variable para simular densidad de Providencia.',
   variant: `${(index % 5) + 1}` as DemoMapVariant,
 }));
 
 export const demoPlazas: DemoMapElement[] = [
-  { id: 'plaza-principal', type: 'plaza', x: '26%', y: '20%', width: 'min(230px, 22%)', height: '24%', variant: 'large' },
-  { id: 'plaza-bolsillo-oriente', type: 'plaza', x: '8%', y: '11%', width: 'min(190px, 18%)', height: '18%', variant: 'small' },
+  { id: 'plaza-principal', type: 'plaza', x: '26%', y: '20%', width: 'min(230px, 22%)', height: '24%', label: 'Plaza principal', description: 'Plaza central del vertical slice, con senderos, fuente y árboles para reforzar la lectura top-down.', variant: 'large' },
+  { id: 'plaza-bolsillo-oriente', type: 'plaza', x: '8%', y: '11%', width: 'min(190px, 18%)', height: '18%', label: 'Plaza bolsillo oriente', description: 'Área verde pequeña para probar espacios públicos secundarios dentro de la maqueta.', variant: 'small' },
 ];
 
 export const demoParkings: DemoMapElement[] = [
-  { id: 'parking-norte', type: 'parking', x: '18%', y: '22%', width: 'min(180px, 18%)', height: '82px', variant: 'north' },
-  { id: 'parking-sur', type: 'parking', x: '8%', y: '14%', width: 'min(150px, 17%)', height: '76px', variant: 'south' },
+  { id: 'parking-norte', type: 'parking', x: '18%', y: '22%', width: 'min(180px, 18%)', height: '82px', label: 'Estacionamiento norte', description: 'Zona de estacionamientos demarcados para añadir variedad urbana sin usar datos externos.', variant: 'north' },
+  { id: 'parking-sur', type: 'parking', x: '8%', y: '14%', width: 'min(150px, 17%)', height: '76px', label: 'Estacionamiento sur', description: 'Bolsa de estacionamientos compacta para probar interacción en elementos de servicio.', variant: 'south' },
 ];
 
 export const demoRoads: DemoMapElement[] = [

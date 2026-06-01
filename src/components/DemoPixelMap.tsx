@@ -135,9 +135,19 @@ export function DemoPixelMap() {
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     if (dragStateRef.current?.pointerId === event.pointerId) {
+      const wasDraggingFeature = didDragRef.current;
       dragStateRef.current = null;
       setIsDragging(false);
-      event.currentTarget.releasePointerCapture(event.pointerId);
+
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+
+      if (wasDraggingFeature) {
+        window.setTimeout(() => {
+          didDragRef.current = false;
+        }, 0);
+      }
     }
   };
 
@@ -234,14 +244,19 @@ export function DemoPixelMap() {
           </button>
         ))}
       </div>
-      <div className="demo-map-controls" aria-label="Controles del mapa demo">
+      <div className="demo-map-controls" role="group" aria-label="Controles del mapa demo">
         <button type="button" onClick={() => updateZoom(DEMO_ZOOM_STEP)} aria-label="Acercar mapa demo">
           +
         </button>
         <button type="button" onClick={() => updateZoom(-DEMO_ZOOM_STEP)} aria-label="Alejar mapa demo">
           −
         </button>
-        <button className="demo-map-controls__center" type="button" onClick={resetMapView}>
+        <button
+          className="demo-map-controls__center"
+          type="button"
+          onClick={resetMapView}
+          aria-label="Centrar mapa demo en Providencia"
+        >
           Centrar Providencia
         </button>
       </div>

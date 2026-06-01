@@ -613,6 +613,11 @@ h1 {
   background: #a4e982;
 }
 
+.demo-map-controls button:focus-visible {
+  outline: 4px solid #fff2c8;
+  outline-offset: 3px;
+}
+
 .demo-map-controls__center {
   grid-column: 1 / -1;
   padding-inline: 0.7rem;
@@ -687,6 +692,11 @@ h1 {
 .demo-info-panel__close:hover,
 .demo-info-panel__close:focus-visible {
   background: #ffca85;
+}
+
+.demo-info-panel__close:focus-visible {
+  outline: 4px solid #fff2c8;
+  outline-offset: 3px;
 }
 
 .demo-legend {
@@ -825,7 +835,7 @@ h1 {
 
   .demo-info-panel {
     left: 0.75rem;
-    top: 4.3rem;
+    top: 8.75rem;
     width: min(300px, calc(100% - 1.5rem));
   }
 

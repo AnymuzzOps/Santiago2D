@@ -41,7 +41,7 @@ export function createSantiagoGameStyle(
         id: 'background-paper',
         type: 'background',
         paint: {
-          'background-color': '#f8e8bd',
+          'background-color': '#ead3a4',
         },
       },
       {
@@ -50,8 +50,8 @@ export function createSantiagoGameStyle(
         source: 'santiago',
         'source-layer': 'water',
         paint: {
-          'fill-color': '#7ed7ee',
-          'fill-outline-color': '#2a8ba3',
+          'fill-color': '#64cbe4',
+          'fill-outline-color': '#1f6f86',
         },
       },
       {
@@ -60,8 +60,8 @@ export function createSantiagoGameStyle(
         source: 'santiago',
         'source-layer': 'park',
         paint: {
-          'fill-color': '#8ed66f',
-          'fill-outline-color': '#4a9d48',
+          'fill-color': '#6fc85f',
+          'fill-outline-color': '#2f7e38',
         },
       },
       {
@@ -162,7 +162,7 @@ export function createSantiagoGameStyle(
           'line-join': 'round',
         },
         paint: {
-          'line-color': '#fff4c9',
+          'line-color': '#f8e9bd',
           'line-width': [
             'interpolate',
             ['linear'],
@@ -212,7 +212,7 @@ export function createSantiagoGameStyle(
           'line-join': 'round',
         },
         paint: {
-          'line-color': '#ffd36b',
+          'line-color': '#f7c85c',
           'line-width': [
             'interpolate',
             ['linear'],
@@ -249,7 +249,7 @@ export function createSantiagoGameStyle(
         source: 'santiago',
         'source-layer': 'place',
         minzoom: 11,
-        filter: ['<=', ['coalesce', ['get', 'rank'], 99], 4],
+        filter: ['<=', ['coalesce', ['get', 'rank'], 99], 3],
         layout: {
           'text-field': ['coalesce', ['get', 'name:es'], ['get', 'name']],
           'text-font': ['Noto Sans Regular'],
@@ -260,7 +260,7 @@ export function createSantiagoGameStyle(
           'text-color': '#5a3c2e',
           'text-halo-color': '#fff2c8',
           'text-halo-width': 2,
-          'text-opacity': ['interpolate', ['linear'], ['zoom'], 11, 0.15, 13, 0.48, 16, 0.72],
+          'text-opacity': ['interpolate', ['linear'], ['zoom'], 11, 0.08, 13, 0.34, 16, 0.58],
         },
       },
     ],
@@ -277,7 +277,7 @@ export function createEmptyGameStyle(): StyleSpecification {
         id: 'background-paper',
         type: 'background',
         paint: {
-          'background-color': '#f8e8bd',
+          'background-color': '#ead3a4',
         },
       },
     ],

@@ -89,6 +89,10 @@ const plazaDetailCoordinates: [number, number][] = [
   [-70.6129, -33.4285], [-70.6111, -33.4286], [-70.6093, -33.4288], [-70.6074, -33.4289],
 ];
 
+const focusGlowCoordinates: [number, number][] = [
+  [-70.6065, -33.4172], [-70.6044, -33.4184], [-70.6086, -33.4219], [-70.6022, -33.4198],
+];
+
 const waterSparkleCoordinates: [number, number][] = [
   [-70.6067, -33.4168], [-70.6035, -33.4161], [-70.6002, -33.4156], [-70.5968, -33.4153],
 ];
@@ -110,12 +114,17 @@ export const dioramaDetails: DioramaFeatureCollection = {
       [-70.6137, -33.4288],
       [-70.6138, -33.4282],
     ], { kind: 'plazaTexture', name: 'Bandejon Pocuro' }),
+    polygonFeature([
+      [-70.6088, -33.4160],
+      [-70.6022, -33.4164],
+      [-70.6018, -33.4204],
+      [-70.6084, -33.4221],
+      [-70.6088, -33.4160],
+    ], { kind: 'focusZone', name: 'Costanera Los Leones focus' }),
     ...treeCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'tree', name: `Arbol ${index + 1}` })),
     ...plazaDetailCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'plazaDetail', name: `Textura plaza ${index + 1}` })),
     ...carCoordinates.map(([lng, lat, color], index) => pointFeature([lng, lat], { kind: 'car', color, name: `Auto ${index + 1}` })),
-    pointFeature([-70.6088, -33.4222], { kind: 'transit', transitType: 'metro', label: 'M', name: 'Metro Los Leones' }),
-    pointFeature([-70.6017, -33.4181], { kind: 'transit', transitType: 'metro', label: 'M', name: 'Metro Tobalaba' }),
-    pointFeature([-70.6041, -33.4252], { kind: 'transit', transitType: 'bus', label: 'BUS', name: 'Paradero Providencia' }),
+    ...focusGlowCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'focusGlow', name: `Brillo urbano ${index + 1}` })),
     ...crosswalkCoordinates.map((coordinates, index) => lineFeature(coordinates, { kind: 'crosswalk', name: `Paso peatonal ${index + 1}` })),
     ...waterSparkleCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'waterSparkle', name: `Brillo agua ${index + 1}` })),
   ],

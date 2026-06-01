@@ -10,8 +10,10 @@ type DioramaLayerProps = {
 
 const DIORAMA_SOURCE_ID = 'santiago-diorama-details';
 const DIORAMA_LAYER_IDS = [
+  'diorama-focus-zone',
   'diorama-plaza-texture',
   'diorama-buildings-soft-shadow',
+  'diorama-buildings-highrise-shadow',
   'diorama-buildings-volume',
   'diorama-buildings-rooftop-highlight',
   'diorama-buildings-highrise-crowns',
@@ -23,8 +25,7 @@ const DIORAMA_LAYER_IDS = [
   'diorama-trees',
   'diorama-car-shadows',
   'diorama-cars',
-  'diorama-transit-halos',
-  'diorama-transit-labels',
+  'diorama-focus-glow',
   'diorama-water-sparkles',
 ];
 
@@ -35,16 +36,28 @@ const buildingHeightExpression = [
   0,
   10,
   20,
-  26,
+  32,
   60,
-  72,
+  88,
   140,
-  150,
+  190,
 ] as unknown as PropertyValueSpecification<number>;
 
 const buildingBaseExpression = ['coalesce', ['to-number', ['get', 'render_min_height']], ['to-number', ['get', 'min_height']], 0] as unknown as PropertyValueSpecification<number>;
 
 const dioramaLayers: LayerSpecification[] = [
+  {
+    id: 'diorama-focus-zone',
+    type: 'fill',
+    source: DIORAMA_SOURCE_ID,
+    minzoom: 14.8,
+    filter: ['==', ['get', 'kind'], 'focusZone'],
+    paint: {
+      'fill-color': '#f7c66b',
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 14.8, 0.08, 16, 0.18],
+      'fill-outline-color': '#d18455',
+    },
+  },
   {
     id: 'diorama-plaza-texture',
     type: 'fill',
@@ -70,6 +83,19 @@ const dioramaLayers: LayerSpecification[] = [
     },
   },
   {
+    id: 'diorama-buildings-highrise-shadow',
+    type: 'fill',
+    source: 'santiago',
+    'source-layer': 'building',
+    minzoom: 15,
+    filter: ['>=', ['coalesce', ['to-number', ['get', 'render_height']], ['to-number', ['get', 'height']], 18], 60],
+    paint: {
+      'fill-color': '#3d2b24',
+      'fill-translate': [14, 18],
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.08, 17, 0.22],
+    },
+  },
+  {
     id: 'diorama-buildings-volume',
     type: 'fill-extrusion',
     source: 'santiago',
@@ -81,17 +107,17 @@ const dioramaLayers: LayerSpecification[] = [
         ['linear'],
         ['coalesce', ['to-number', ['get', 'render_height']], ['to-number', ['get', 'height']], 18],
         0,
-        '#f6c27a',
+        '#eeb96f',
         24,
-        '#ffdca0',
+        '#ffd58f',
         70,
-        '#d18455',
+        '#c8754f',
         140,
-        '#8f5f44',
+        '#704936',
       ],
       'fill-extrusion-height': buildingHeightExpression,
       'fill-extrusion-base': buildingBaseExpression,
-      'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 14.8, 0.78, 16, 0.96],
+      'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 14.8, 0.82, 16, 0.98],
       'fill-extrusion-vertical-gradient': true,
     },
   },
@@ -102,9 +128,9 @@ const dioramaLayers: LayerSpecification[] = [
     'source-layer': 'building',
     minzoom: 15.2,
     paint: {
-      'fill-color': '#fff7d8',
+      'fill-color': '#fff9dc',
       'fill-translate': [-1, -1],
-      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.2, 0.22, 17, 0.42],
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.2, 0.28, 17, 0.5],
     },
   },
   {
@@ -115,9 +141,9 @@ const dioramaLayers: LayerSpecification[] = [
     minzoom: 15.3,
     filter: ['>=', ['coalesce', ['to-number', ['get', 'render_height']], ['to-number', ['get', 'height']], 18], 60],
     paint: {
-      'fill-color': '#ffe8a8',
+      'fill-color': '#fff0b8',
       'fill-translate': [-2, -2],
-      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.3, 0.18, 17, 0.36],
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.3, 0.3, 17, 0.55],
     },
   },
   {
@@ -237,36 +263,17 @@ const dioramaLayers: LayerSpecification[] = [
     },
   },
   {
-    id: 'diorama-transit-halos',
+    id: 'diorama-focus-glow',
     type: 'circle',
     source: DIORAMA_SOURCE_ID,
-    filter: ['==', ['get', 'kind'], 'transit'],
-    minzoom: 14.5,
+    filter: ['==', ['get', 'kind'], 'focusGlow'],
+    minzoom: 15.2,
     paint: {
-      'circle-color': ['match', ['get', 'transitType'], 'metro', '#e54545', 'bus', '#2a8ba3', '#fff2c8'],
-      'circle-opacity': 0.94,
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 14.5, 9, 17, 15],
-      'circle-stroke-color': '#3d2b24',
-      'circle-stroke-width': 2.5,
-    },
-  },
-  {
-    id: 'diorama-transit-labels',
-    type: 'symbol',
-    source: DIORAMA_SOURCE_ID,
-    filter: ['==', ['get', 'kind'], 'transit'],
-    minzoom: 14.5,
-    layout: {
-      'text-field': ['get', 'label'],
-      'text-font': ['Noto Sans Bold', 'Noto Sans Regular'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 14.5, 9, 17, 12],
-      'text-anchor': 'center',
-      'text-allow-overlap': true,
-    },
-    paint: {
-      'text-color': '#fff8df',
-      'text-halo-color': '#3d2b24',
-      'text-halo-width': 1.2,
+      'circle-color': '#ffd36b',
+      'circle-opacity': ['interpolate', ['linear'], ['zoom'], 15.2, 0.18, 17, 0.38],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 15.2, 8, 17, 18],
+      'circle-stroke-color': '#fff2c8',
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 15.2, 1, 17, 2],
     },
   },
   {

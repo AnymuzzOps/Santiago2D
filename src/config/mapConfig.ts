@@ -3,10 +3,10 @@ type BoundsTuple = [LngLatTuple, LngLatTuple];
 
 export const mapConfig = {
   zoneName: 'Providencia · Santiago',
-  initialCenter: [-70.6042, -33.4212] as LngLatTuple,
-  initialZoom: 15.45,
-  dioramaPitch: 55,
-  dioramaBearing: -18,
+  initialCenter: [-70.6037, -33.4194] as LngLatTuple,
+  initialZoom: 15.85,
+  dioramaPitch: 58,
+  dioramaBearing: -20,
   minZoom: 10,
   maxZoom: 18,
   navigationBounds: [

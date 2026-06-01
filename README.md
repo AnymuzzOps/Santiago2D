@@ -36,6 +36,10 @@ Santiago2D está en una versión demo cerrada antes de conectar datos reales. La
 
 Conectar tiles legales compatibles con MapLibre. La ruta recomendada es usar un esquema tipo OpenMapTiles o un archivo/fuente PMTiles con atribución correcta de OpenStreetMap y revisar que las capas usadas en `src/map/style.ts` coincidan con el proveedor elegido.
 
+## Capa experimental DioramaLayer
+
+Cuando el mapa real de MapLibre está activo, Santiago2D monta una capa visual experimental `DioramaLayer` sobre el estilo base. Esta capa se puede activar/desactivar desde el control **Diorama 2.5D** y agrega volumen con `fill-extrusion`, sombras, highlights de techos y detalles urbanos livianos desde zoom 15+ en la zona Providencia / Los Leones / Costanera Center.
+
 ## Configuración de tiles legales
 
 El proyecto no incluye tiles de Google Maps, Apple Maps ni fuentes sin permiso. **No usar tiles de Google Maps, Apple Maps ni servidores públicos de OSM en producción**: además de no ser compatibles con este estilo vectorial, sus términos/infraestructura no están pensados para este uso. Para ver datos reales del mapa, crea un archivo `.env.local` con una fuente legal de vector tiles compatible con MapLibre:

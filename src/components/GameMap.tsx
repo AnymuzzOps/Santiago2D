@@ -4,6 +4,7 @@ import { mapConfig } from '../config/mapConfig';
 import { customPois, customPoiTypeLabels, type CustomPoi } from '../data/customPois';
 import { createSantiagoGameStyle, type TileSourceKind } from '../map/style';
 import { DemoPixelMap } from './DemoPixelMap';
+import { DioramaLayer } from './DioramaLayer';
 import { MapPoiMarker, type MapPoiMarkerConstructor } from './MapPoiMarker';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
@@ -59,6 +60,7 @@ export function GameMap() {
   const [hasTileError, setHasTileError] = useState(false);
   const [selectedCustomPoi, setSelectedCustomPoi] = useState<CustomPoi | null>(null);
   const [poiEditorDraft, setPoiEditorDraft] = useState<PoiEditorDraft | null>(null);
+  const [isDioramaEnabled, setIsDioramaEnabled] = useState(true);
 
   const tileSourceMode = detectTileSourceMode(tileUrl);
   const shouldRenderDemoPixelMap = tileSourceMode === 'empty';
@@ -102,7 +104,7 @@ export function GameMap() {
 
         map.addControl(
           new maplibregl.NavigationControl({
-            visualizePitch: false,
+            visualizePitch: true,
             showCompass: true,
           }),
           'top-right',
@@ -220,13 +222,28 @@ export function GameMap() {
           </div>
         )}
         {shouldRenderMapLibre && (
-          <MapPoiMarker
-            map={mapInstance}
-            markerConstructor={markerConstructor}
-            pois={visibleCustomPois}
-            selectedPoiId={selectedCustomPoi?.id}
-            onSelect={handleSelectCustomPoi}
-          />
+          <>
+            <DioramaLayer enabled={isDioramaEnabled} map={mapInstance} />
+            <MapPoiMarker
+              map={mapInstance}
+              markerConstructor={markerConstructor}
+              pois={visibleCustomPois}
+              selectedPoiId={selectedCustomPoi?.id}
+              onSelect={handleSelectCustomPoi}
+            />
+          </>
+        )}
+        {shouldRenderMapLibre && (
+          <button
+            type="button"
+            className={`diorama-toggle ${isDioramaEnabled ? 'diorama-toggle--active' : ''}`}
+            onClick={() => setIsDioramaEnabled((enabled) => !enabled)}
+            aria-pressed={isDioramaEnabled}
+            aria-label="Activar o desactivar capa diorama experimental"
+          >
+            <span>Diorama 2.5D</span>
+            <strong>{isDioramaEnabled ? 'Activo' : 'Plano'}</strong>
+          </button>
         )}
         {shouldRenderMapLibre && selectedCustomPoi && (
           <aside className="real-map-info-panel" aria-live="polite" aria-label="Información del punto seleccionado">

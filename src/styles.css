@@ -425,6 +425,51 @@ h1 {
   font-weight: 800;
 }
 
+.diorama-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 5.25rem;
+  z-index: 4;
+  display: grid;
+  gap: 0.1rem;
+  min-width: 150px;
+  padding: 0.55rem 0.75rem;
+  border: 3px solid #3d2b24;
+  border-radius: 14px;
+  background: rgba(255, 242, 200, 0.94);
+  color: #3d2b24;
+  box-shadow: 0 5px 0 #7d5d43;
+  cursor: pointer;
+  text-align: left;
+}
+
+.diorama-toggle span {
+  font-size: 0.72rem;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.diorama-toggle strong {
+  color: #2a8ba3;
+  font-size: 0.95rem;
+}
+
+.diorama-toggle--active {
+  background: rgba(255, 211, 107, 0.96);
+  box-shadow: 0 5px 0 #9b6a42;
+}
+
+.diorama-toggle:hover,
+.diorama-toggle:focus-visible {
+  transform: translateY(-2px);
+}
+
+.diorama-toggle:focus-visible {
+  outline: 4px solid #7ed7ee;
+  outline-offset: 3px;
+}
+
 .demo-map {
   --city-ground: #eecb8a;
   --city-grid: rgba(94, 73, 50, 0.11);
@@ -1098,6 +1143,13 @@ h1 {
     right: 0.75rem;
     top: 0.75rem;
     grid-template-columns: repeat(2, 2.15rem);
+  }
+
+  .diorama-toggle {
+    right: 0.75rem;
+    top: 4.85rem;
+    min-width: 128px;
+    padding: 0.45rem 0.6rem;
   }
 
   .demo-map-controls button {

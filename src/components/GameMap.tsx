@@ -1,12 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Map as MapLibreMap } from 'maplibre-gl';
+import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
 import { mapConfig } from '../config/mapConfig';
 import { DemoPixelMap } from './DemoPixelMap';
+import { realMapPois, realMapPoiTypeLabels, type RealMapPoi, type RealMapPoiType } from '../data/realMapPoiData';
 import { createSantiagoGameStyle, type TileSourceKind } from '../map/style';
 
 const tileUrl = import.meta.env.VITE_TILE_URL?.trim();
 const tileAttribution = import.meta.env.VITE_TILE_ATTRIBUTION?.trim() || mapConfig.defaultAttribution;
 const requiredTilePlaceholders = ['{z}', '{x}', '{y}'];
+
+const realMapPoiIcons: Record<RealMapPoiType, string> = {
+  metro: 'M',
+  plaza: '✦',
+  cafe: '☕',
+  hospital: '+',
+  university: 'U',
+};
 
 type TileSourceMode = TileSourceKind | 'empty' | 'invalid';
 
@@ -32,7 +41,10 @@ const detectTileSourceMode = (url?: string): TileSourceMode => {
 export function GameMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
+  const realMapMarkersRef = useRef<Map<string, MapLibreMarker>>(new Map());
+  const realMapMarkerElementsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [hasTileError, setHasTileError] = useState(false);
+  const [selectedRealFeature, setSelectedRealFeature] = useState<RealMapPoi | null>(null);
 
   const tileSourceMode = detectTileSourceMode(tileUrl);
   const shouldRenderDemoPixelMap = tileSourceMode === 'empty';
@@ -90,6 +102,39 @@ export function GameMap() {
           'bottom-right',
         );
 
+        realMapPois.forEach((poi) => {
+          const markerButton = document.createElement('button');
+          markerButton.type = 'button';
+          markerButton.className = `real-poi-marker real-poi-marker--${poi.type}`;
+          markerButton.setAttribute('aria-label', `Ver información de ${poi.label}`);
+          markerButton.setAttribute('aria-pressed', 'false');
+
+          const icon = document.createElement('span');
+          icon.className = 'real-poi-marker__icon';
+          icon.setAttribute('aria-hidden', 'true');
+          icon.textContent = realMapPoiIcons[poi.type];
+
+          const label = document.createElement('span');
+          label.className = 'real-poi-marker__label';
+          label.textContent = poi.label;
+
+          markerButton.append(icon, label);
+          markerButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            setSelectedRealFeature(poi);
+          });
+
+          const marker = new maplibregl.Marker({
+            element: markerButton,
+            anchor: 'bottom',
+          })
+            .setLngLat(poi.coordinates)
+            .addTo(map);
+
+          realMapMarkersRef.current.set(poi.id, marker);
+          realMapMarkerElementsRef.current.set(poi.id, markerButton);
+        });
+
         mapRef.current = map;
       })
       .catch(() => {
@@ -98,10 +143,21 @@ export function GameMap() {
 
     return () => {
       isMounted = false;
+      realMapMarkersRef.current.forEach((marker) => marker.remove());
+      realMapMarkersRef.current.clear();
+      realMapMarkerElementsRef.current.clear();
       mapRef.current?.remove();
       mapRef.current = null;
     };
   }, [shouldRenderMapLibre, tileSourceMode]);
+
+  useEffect(() => {
+    realMapMarkerElementsRef.current.forEach((element, poiId) => {
+      const isSelected = selectedRealFeature?.id === poiId;
+      element.classList.toggle('real-poi-marker--selected', isSelected);
+      element.setAttribute('aria-pressed', String(isSelected));
+    });
+  }, [selectedRealFeature]);
 
   const showTileErrorNotice = shouldRenderMapLibre && hasTileError;
 
@@ -139,6 +195,22 @@ export function GameMap() {
               activa y compatible con MapLibre. La app sigue disponible.
             </span>
           </div>
+        )}
+        {shouldRenderMapLibre && selectedRealFeature && (
+          <aside className="real-map-info-panel" aria-live="polite" aria-label="Información del punto seleccionado">
+            <span className={`real-map-info-panel__type real-map-info-panel__type--${selectedRealFeature.type}`}>
+              {realMapPoiTypeLabels[selectedRealFeature.type]}
+            </span>
+            <strong>{selectedRealFeature.label}</strong>
+            <p>{selectedRealFeature.description}</p>
+            <button
+              type="button"
+              onClick={() => setSelectedRealFeature(null)}
+              aria-label="Cerrar información del punto seleccionado"
+            >
+              Cerrar
+            </button>
+          </aside>
         )}
         <div className="pixel-badge">{mapConfig.zoneName}</div>
       </div>

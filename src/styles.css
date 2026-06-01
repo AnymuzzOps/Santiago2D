@@ -246,6 +246,11 @@ h1 {
   background: #7b61c9;
 }
 
+.real-poi-marker--landmark .real-poi-marker__icon,
+.real-map-info-panel__type--landmark {
+  background: #f1a84f;
+}
+
 .real-map-info-panel {
   position: absolute;
   right: 1rem;

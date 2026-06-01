@@ -65,15 +65,27 @@ export function createSantiagoGameStyle(
         },
       },
       {
-        id: 'buildings-shadow',
+        id: 'buildings-long-shadow',
         type: 'fill',
         source: 'santiago',
         'source-layer': 'building',
-        minzoom: 14,
+        minzoom: 13.5,
+        paint: {
+          'fill-color': '#5d3f2e',
+          'fill-translate': [7, 9],
+          'fill-opacity': ['interpolate', ['linear'], ['zoom'], 13.5, 0.16, 16, 0.32],
+        },
+      },
+      {
+        id: 'buildings-contact-shadow',
+        type: 'fill',
+        source: 'santiago',
+        'source-layer': 'building',
+        minzoom: 13.5,
         paint: {
           'fill-color': '#6f4c37',
-          'fill-translate': [4, 5],
-          'fill-opacity': 0.48,
+          'fill-translate': [3, 4],
+          'fill-opacity': ['interpolate', ['linear'], ['zoom'], 13.5, 0.28, 16, 0.52],
         },
       },
       {
@@ -81,10 +93,37 @@ export function createSantiagoGameStyle(
         type: 'fill',
         source: 'santiago',
         'source-layer': 'building',
-        minzoom: 14,
+        minzoom: 13.5,
         paint: {
-          'fill-color': '#ffe0a6',
+          'fill-color': ['interpolate', ['linear'], ['zoom'], 13.5, '#f6c986', 16, '#ffe0a6'],
           'fill-outline-color': '#7d5d43',
+        },
+      },
+      {
+        id: 'buildings-rooftop-highlight',
+        type: 'fill',
+        source: 'santiago',
+        'source-layer': 'building',
+        minzoom: 15,
+        paint: {
+          'fill-color': '#fff1c4',
+          'fill-translate': [-1, -1],
+          'fill-opacity': 0.28,
+        },
+      },
+      {
+        id: 'buildings-pixel-outline',
+        type: 'line',
+        source: 'santiago',
+        'source-layer': 'building',
+        minzoom: 14,
+        layout: {
+          'line-join': 'round',
+        },
+        paint: {
+          'line-color': '#6f4c37',
+          'line-opacity': ['interpolate', ['linear'], ['zoom'], 14, 0.65, 17, 0.95],
+          'line-width': ['interpolate', ['linear'], ['zoom'], 14, 0.5, 17, 1.4],
         },
       },
       {

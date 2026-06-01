@@ -103,6 +103,17 @@ No subas tokens, claves privadas ni URLs con secretos al repositorio. Proveedore
 
 Si `VITE_TILE_URL` no está configurado, la app muestra un modo demo local sin tiles externos: una maqueta pixel art de Providencia con calles, edificios, áreas verdes, agua decorativa y marcadores.
 
+
+### Fase 3 experimental: tiles WebP pre-renderizados
+
+Además del modo principal MapLibre, el repo incluye una exploración opcional de arquitectura con tiles WebP pre-renderizados en canvas. Está documentada en `docs/rendered-tiles-architecture.md` y se puede activar solo para pruebas con:
+
+```bash
+VITE_ENABLE_RENDERED_TILE_VIEWER=true
+```
+
+Este prototipo usa placeholders procedurales, no conecta todavía a Santiago real, no usa imágenes externas y no reemplaza el mapa principal.
+
 ## Desarrollo
 
 ```bash

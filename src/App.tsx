@@ -1,4 +1,7 @@
 import { GameMap } from './components/GameMap';
+import { RenderedTileViewer } from './components/RenderedTileViewer';
+
+const isRenderedTilePrototypeEnabled = import.meta.env.VITE_ENABLE_RENDERED_TILE_VIEWER === 'true';
 
 export default function App() {
   return (
@@ -13,6 +16,7 @@ export default function App() {
       </section>
 
       <GameMap />
+      {isRenderedTilePrototypeEnabled && <RenderedTileViewer />}
     </main>
   );
 }

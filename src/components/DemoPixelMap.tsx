@@ -168,6 +168,8 @@ export function DemoPixelMap() {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onLostPointerCapture={handlePointerUp}
+        aria-label="Mapa demo navegable: arrastra para mover la vista"
       >
         <div className="demo-map__water" aria-hidden="true" />
         {demoPlazas.map((plaza) => (

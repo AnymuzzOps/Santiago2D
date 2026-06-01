@@ -172,6 +172,7 @@ h1 {
   min-width: 320px;
   min-height: 420px;
   overflow: hidden;
+  overscroll-behavior: contain;
   background:
     linear-gradient(90deg, var(--city-grid) 1px, transparent 1px),
     linear-gradient(0deg, var(--city-grid) 1px, transparent 1px),
@@ -191,6 +192,7 @@ h1 {
   cursor: grab;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 .demo-map__viewport--dragging {

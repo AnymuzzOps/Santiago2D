@@ -19,6 +19,7 @@ Santiago2D está en una versión demo cerrada antes de conectar datos reales. La
 - Mapa visual top-down de Providencia con calles, plazas, estacionamientos, agua decorativa, árboles, luminarias, edificios y marcadores.
 - Navegación básica del demo con pan mediante mouse/touch, zoom `+` / `-` y botón **Centrar Providencia**.
 - Interacción con marcadores, edificios, plazas y estacionamientos para abrir un panel informativo.
+- Controles y elementos clickeables implementados como botones con labels accesibles y estados `focus-visible`.
 - Fallback a MapLibre cuando se configura `VITE_TILE_URL` con una fuente legal compatible.
 - Build preparado para GitHub Pages con `base: "/Santiago2D/"`.
 
@@ -27,7 +28,7 @@ Santiago2D está en una versión demo cerrada antes de conectar datos reales. La
 - Conectar una fuente real de tiles/vector data.
 - Ajustar el estilo MapLibre contra el esquema exacto del proveedor elegido.
 - Reemplazar gradualmente `demoMapData` por datos reales o generados desde OpenStreetMap.
-- Agregar pruebas automatizadas y validaciones visuales.
+- Agregar pruebas automatizadas, validaciones visuales y una revisión completa de accesibilidad.
 - Implementar features futuras como rutas, búsqueda o 3D; no forman parte de este MVP demo.
 
 ### Próximo paso

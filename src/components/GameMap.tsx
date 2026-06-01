@@ -89,8 +89,8 @@ export function GameMap() {
           minZoom: mapConfig.minZoom,
           maxZoom: mapConfig.maxZoom,
           maxBounds: mapConfig.navigationBounds,
-          pitch: 0,
-          bearing: 0,
+          pitch: mapConfig.dioramaPitch,
+          bearing: mapConfig.dioramaBearing,
           attributionControl: false,
         });
 
@@ -232,6 +232,11 @@ export function GameMap() {
               onSelect={handleSelectCustomPoi}
             />
           </>
+        )}
+        {shouldRenderMapLibre && isDioramaEnabled && (
+          <div className="diorama-mode-badge" role="status">
+            Modo diorama experimental
+          </div>
         )}
         {shouldRenderMapLibre && (
           <button

@@ -425,6 +425,23 @@ h1 {
   font-weight: 800;
 }
 
+.diorama-mode-badge {
+  position: absolute;
+  left: 1rem;
+  top: 4.75rem;
+  z-index: 4;
+  padding: 0.45rem 0.7rem;
+  border: 3px solid #3d2b24;
+  border-radius: 999px;
+  background: rgba(255, 211, 107, 0.96);
+  color: #3d2b24;
+  font-size: 0.78rem;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 5px 0 #9b6a42;
+}
+
 .diorama-toggle {
   position: absolute;
   right: 1rem;
@@ -1143,6 +1160,13 @@ h1 {
     right: 0.75rem;
     top: 0.75rem;
     grid-template-columns: repeat(2, 2.15rem);
+  }
+
+  .diorama-mode-badge {
+    left: 0.75rem;
+    top: 4.65rem;
+    max-width: calc(100% - 10rem);
+    font-size: 0.64rem;
   }
 
   .diorama-toggle {

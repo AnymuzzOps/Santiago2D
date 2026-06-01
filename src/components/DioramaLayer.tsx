@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { GeoJSONSourceSpecification, LayerSpecification, Map as MapLibreMap, PropertyValueSpecification } from 'maplibre-gl';
+import { mapConfig } from '../config/mapConfig';
 import { dioramaDetails } from '../data/dioramaDetails';
 
 type DioramaLayerProps = {
@@ -13,9 +14,11 @@ const DIORAMA_LAYER_IDS = [
   'diorama-buildings-soft-shadow',
   'diorama-buildings-volume',
   'diorama-buildings-rooftop-highlight',
+  'diorama-buildings-highrise-crowns',
   'diorama-buildings-cartoon-outline',
   'diorama-avenue-glow',
   'diorama-crosswalks',
+  'diorama-plaza-details',
   'diorama-tree-shadows',
   'diorama-trees',
   'diorama-car-shadows',
@@ -49,8 +52,8 @@ const dioramaLayers: LayerSpecification[] = [
     minzoom: 15,
     filter: ['==', ['get', 'kind'], 'plazaTexture'],
     paint: {
-      'fill-color': '#a8df76',
-      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.18, 16, 0.42],
+      'fill-color': '#78c75c',
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.28, 16, 0.58],
       'fill-outline-color': '#4a9d48',
     },
   },
@@ -78,17 +81,17 @@ const dioramaLayers: LayerSpecification[] = [
         ['linear'],
         ['coalesce', ['to-number', ['get', 'render_height']], ['to-number', ['get', 'height']], 18],
         0,
-        '#f4c781',
+        '#f6c27a',
         24,
-        '#f8d897',
+        '#ffdca0',
         70,
-        '#d99d62',
+        '#d18455',
         140,
-        '#b97d53',
+        '#8f5f44',
       ],
       'fill-extrusion-height': buildingHeightExpression,
       'fill-extrusion-base': buildingBaseExpression,
-      'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 14.8, 0.72, 16, 0.92],
+      'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 14.8, 0.78, 16, 0.96],
       'fill-extrusion-vertical-gradient': true,
     },
   },
@@ -99,9 +102,22 @@ const dioramaLayers: LayerSpecification[] = [
     'source-layer': 'building',
     minzoom: 15.2,
     paint: {
-      'fill-color': '#fff1c4',
+      'fill-color': '#fff7d8',
       'fill-translate': [-1, -1],
-      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.2, 0.14, 17, 0.3],
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.2, 0.22, 17, 0.42],
+    },
+  },
+  {
+    id: 'diorama-buildings-highrise-crowns',
+    type: 'fill',
+    source: 'santiago',
+    'source-layer': 'building',
+    minzoom: 15.3,
+    filter: ['>=', ['coalesce', ['to-number', ['get', 'render_height']], ['to-number', ['get', 'height']], 18], 60],
+    paint: {
+      'fill-color': '#ffe8a8',
+      'fill-translate': [-2, -2],
+      'fill-opacity': ['interpolate', ['linear'], ['zoom'], 15.3, 0.18, 17, 0.36],
     },
   },
   {
@@ -115,8 +131,8 @@ const dioramaLayers: LayerSpecification[] = [
     },
     paint: {
       'line-color': '#5a3c2e',
-      'line-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.52, 17, 0.9],
-      'line-width': ['interpolate', ['linear'], ['zoom'], 15, 0.55, 17, 1.6],
+      'line-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.62, 17, 0.96],
+      'line-width': ['interpolate', ['linear'], ['zoom'], 15, 0.75, 17, 1.9],
     },
   },
   {
@@ -154,6 +170,20 @@ const dioramaLayers: LayerSpecification[] = [
     },
   },
   {
+    id: 'diorama-plaza-details',
+    type: 'circle',
+    source: DIORAMA_SOURCE_ID,
+    filter: ['==', ['get', 'kind'], 'plazaDetail'],
+    minzoom: 15.4,
+    paint: {
+      'circle-color': '#e7ffd0',
+      'circle-opacity': ['interpolate', ['linear'], ['zoom'], 15.4, 0.28, 17, 0.68],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 15.4, 2, 17, 4.5],
+      'circle-stroke-color': '#4a9d48',
+      'circle-stroke-width': 1,
+    },
+  },
+  {
     id: 'diorama-tree-shadows',
     type: 'circle',
     source: DIORAMA_SOURCE_ID,
@@ -161,8 +191,8 @@ const dioramaLayers: LayerSpecification[] = [
     minzoom: 15,
     paint: {
       'circle-color': '#4f3528',
-      'circle-opacity': 0.24,
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 15, 4, 17, 9],
+      'circle-opacity': 0.28,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 15, 5, 17, 11],
       'circle-translate': [3, 4],
     },
   },
@@ -174,10 +204,10 @@ const dioramaLayers: LayerSpecification[] = [
     minzoom: 15,
     paint: {
       'circle-color': '#4a9d48',
-      'circle-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.65, 16, 0.95],
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 15, 3.5, 17, 8],
-      'circle-stroke-color': '#2f6f35',
-      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 15, 1, 17, 2.5],
+      'circle-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.78, 16, 1],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 15, 5, 17, 10],
+      'circle-stroke-color': '#245f2f',
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 15, 1.4, 17, 3],
     },
   },
   {
@@ -213,8 +243,8 @@ const dioramaLayers: LayerSpecification[] = [
     filter: ['==', ['get', 'kind'], 'transit'],
     minzoom: 14.5,
     paint: {
-      'circle-color': '#fff2c8',
-      'circle-opacity': 0.92,
+      'circle-color': ['match', ['get', 'transitType'], 'metro', '#e54545', 'bus', '#2a8ba3', '#fff2c8'],
+      'circle-opacity': 0.94,
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 14.5, 9, 17, 15],
       'circle-stroke-color': '#3d2b24',
       'circle-stroke-width': 2.5,
@@ -234,9 +264,9 @@ const dioramaLayers: LayerSpecification[] = [
       'text-allow-overlap': true,
     },
     paint: {
-      'text-color': '#e54545',
-      'text-halo-color': '#fff2c8',
-      'text-halo-width': 1.4,
+      'text-color': '#fff8df',
+      'text-halo-color': '#3d2b24',
+      'text-halo-width': 1.2,
     },
   },
   {
@@ -325,9 +355,9 @@ export function DioramaLayer({ enabled, map }: DioramaLayerProps) {
     }
 
     map.easeTo({
-      bearing: enabled ? -24 : 0,
+      bearing: enabled ? mapConfig.dioramaBearing : 0,
       duration: 700,
-      pitch: enabled ? 52 : 0,
+      pitch: enabled ? mapConfig.dioramaPitch : 0,
     });
   }, [enabled, map]);
 

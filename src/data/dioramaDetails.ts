@@ -67,11 +67,12 @@ const treeCoordinates: [number, number][] = [
   [-70.5897, -33.4287], [-70.5891, -33.4294], [-70.5884, -33.4289], [-70.5901, -33.4296],
   [-70.6132, -33.4285], [-70.6114, -33.4286], [-70.6097, -33.4287], [-70.6079, -33.4288],
   [-70.6068, -33.4185], [-70.6047, -33.4178], [-70.6025, -33.4172], [-70.6009, -33.4169],
+  [-70.6038, -33.4210], [-70.6026, -33.4204], [-70.6013, -33.4197], [-70.5994, -33.4190],
 ];
 
 const carCoordinates: Array<[number, number, string]> = [
   [-70.6098, -33.4243, 'yellow'], [-70.6083, -33.4252, 'blue'], [-70.6069, -33.4262, 'red'],
-  [-70.6039, -33.4257, 'white'], [-70.6015, -33.4249, 'blue'], [-70.5988, -33.4243, 'yellow'],
+  [-70.6048, -33.4232, 'white'], [-70.6028, -33.4225, 'blue'], [-70.6005, -33.4217, 'yellow'],
   [-70.6121, -33.4279, 'red'], [-70.6101, -33.4281, 'white'], [-70.6076, -33.4285, 'blue'],
 ];
 
@@ -81,6 +82,11 @@ const crosswalkCoordinates: [number, number][][] = [
   [[-70.6045, -33.4265], [-70.6040, -33.4270]],
   [[-70.6018, -33.4193], [-70.6012, -33.4198]],
   [[-70.5904, -33.4290], [-70.5897, -33.4295]],
+];
+
+const plazaDetailCoordinates: [number, number][] = [
+  [-70.5898, -33.4287], [-70.5892, -33.4290], [-70.5887, -33.4294],
+  [-70.6129, -33.4285], [-70.6111, -33.4286], [-70.6093, -33.4288], [-70.6074, -33.4289],
 ];
 
 const waterSparkleCoordinates: [number, number][] = [
@@ -105,10 +111,11 @@ export const dioramaDetails: DioramaFeatureCollection = {
       [-70.6138, -33.4282],
     ], { kind: 'plazaTexture', name: 'Bandejon Pocuro' }),
     ...treeCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'tree', name: `Arbol ${index + 1}` })),
+    ...plazaDetailCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'plazaDetail', name: `Textura plaza ${index + 1}` })),
     ...carCoordinates.map(([lng, lat, color], index) => pointFeature([lng, lat], { kind: 'car', color, name: `Auto ${index + 1}` })),
-    pointFeature([-70.6088, -33.4222], { kind: 'transit', label: 'M', name: 'Metro Los Leones' }),
-    pointFeature([-70.6017, -33.4181], { kind: 'transit', label: 'M', name: 'Metro Tobalaba' }),
-    pointFeature([-70.6041, -33.4252], { kind: 'transit', label: 'BUS', name: 'Paradero Providencia' }),
+    pointFeature([-70.6088, -33.4222], { kind: 'transit', transitType: 'metro', label: 'M', name: 'Metro Los Leones' }),
+    pointFeature([-70.6017, -33.4181], { kind: 'transit', transitType: 'metro', label: 'M', name: 'Metro Tobalaba' }),
+    pointFeature([-70.6041, -33.4252], { kind: 'transit', transitType: 'bus', label: 'BUS', name: 'Paradero Providencia' }),
     ...crosswalkCoordinates.map((coordinates, index) => lineFeature(coordinates, { kind: 'crosswalk', name: `Paso peatonal ${index + 1}` })),
     ...waterSparkleCoordinates.map((coordinates, index) => pointFeature(coordinates, { kind: 'waterSparkle', name: `Brillo agua ${index + 1}` })),
   ],
